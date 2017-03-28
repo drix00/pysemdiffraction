@@ -27,7 +27,6 @@ Python scripts to acquire and analyze SEM diffraction pattern
 ###############################################################################
 
 # Standard library modules.
-import logging
 
 # Third party modules.
 

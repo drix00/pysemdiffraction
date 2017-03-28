@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 
 """
-.. py:currentmodule:: pysemdiffraction
-   :synopsis: Python scripts to acquire and analyze SEM diffraction pattern
+.. py:currentmodule:: pysemdiffraction.tests
+   :synopsis: Regression testing for the project.
 
 .. moduleauthor:: Hendrix Demers <hendrix.demers@mail.mcgill.ca>
 
-Python scripts to acquire and analyze SEM diffraction pattern
+Regression testing for the project.
 """
 
 ###############################################################################
-# Copyright ${year} Hendrix Demers
+# Copyright 2017 Hendrix Demers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,36 +27,15 @@ Python scripts to acquire and analyze SEM diffraction pattern
 ###############################################################################
 
 # Standard library modules.
-import logging
 
 # Third party modules.
 
 # Local modules.
 
 # Project modules.
-from pysemdiffraction.camera.sentech import Sentech
 
 # Globals and constants variables.
 
 if __name__ == "__main__":  # pragma: no cover
-    sentach_api = Sentech()
-
-    sentach_api.init_api()
-    print(sentach_api.get_api_version())
-    print(sentach_api.get_api_file_version())
-
-    sentach_api.open_camera()
-    usb_vendor_id, usb_product_id, fpga_version, firmware_version = sentach_api.get_camera_version()
-    print(usb_vendor_id)
-    print(usb_product_id)
-    print(fpga_version)
-    print(firmware_version)
-
-    print(sentach_api.get_product_name())
-
-    function_availabilities = sentach_api.check_all_functions()
-
-    for key, value in function_availabilities.items():
-        print("{:s} -> {:s}".format(key, value))
-
-    sentach_api.close_camera()
+    import nose
+    nose.main()

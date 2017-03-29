@@ -62,4 +62,6 @@ if __name__ == "__main__":  # pragma: no cover
     for key, value in function_availabilities.items():
         print("{:d} -> {:s}".format(key, str(value)))
 
+    sentach_api.print_available_functions()
+
     sentach_api.close_camera()

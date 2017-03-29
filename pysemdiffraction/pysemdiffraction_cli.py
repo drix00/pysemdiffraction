@@ -27,6 +27,7 @@ Python scripts to acquire and analyze SEM diffraction pattern
 ###############################################################################
 
 # Standard library modules.
+import logging
 
 # Third party modules.
 
@@ -38,6 +39,7 @@ from pysemdiffraction.camera.sentech import Sentech
 # Globals and constants variables.
 
 if __name__ == "__main__":  # pragma: no cover
+    #logging.getLogger().setLevel(logging.INFO)
     sentach_api = Sentech()
 
     sentach_api.init_api()
@@ -46,16 +48,18 @@ if __name__ == "__main__":  # pragma: no cover
 
     sentach_api.open_camera()
     usb_vendor_id, usb_product_id, fpga_version, firmware_version = sentach_api.get_camera_version()
-    print(usb_vendor_id)
-    print(usb_product_id)
+    print(hex(usb_vendor_id))
+    print(hex(usb_product_id))
     print(fpga_version)
     print(firmware_version)
+    print(hex(fpga_version))
+    print(hex(firmware_version))
 
     print(sentach_api.get_product_name())
 
     function_availabilities = sentach_api.check_all_functions()
 
     for key, value in function_availabilities.items():
-        print("{:s} -> {:s}".format(key, value))
+        print("{:d} -> {:s}".format(key, str(value)))
 
     sentach_api.close_camera()

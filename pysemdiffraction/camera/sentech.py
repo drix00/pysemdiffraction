@@ -194,13 +194,15 @@ class Sentech(object):
 
         product_name = ""
 
-        product_name_buffer = self.ffi.new("PSTR[]", 256)
-        buffer_size = len(product_name_buffer)
-        status = self.library_handler.StTrg_GetProductNameA(self.camera_handle, product_name_buffer, buffer_size)
-        if not status:
-            logging.error("Cannot get the GetProductNameA")
-        logging.info(product_name_buffer[0])
-        logging.info(buffer_size)
+#        product_name_buffer = self.ffi.new("PSTR[]", 256)
+#        buffer_size = len(product_name_buffer)
+#        status = self.library_handler.StTrg_GetProductNameA(self.camera_handle, product_name_buffer, buffer_size)
+#        if not status:
+#            logging.error("Cannot get the GetProductNameA")
+#        logging.info(product_name_buffer[0])
+#        logging.info(product_name_buffer)
+#        #logging.info(self.ffi.string(product_name_buffer))
+#        logging.info(buffer_size)
 
         product_name_buffer = self.ffi.new("PWSTR")
         buffer_size = 256
@@ -208,8 +210,11 @@ class Sentech(object):
         if not status:
             logging.error("Cannot get the GetProductNameW")
         logging.info(product_name_buffer[0])
+        logging.info(self.ffi.string(product_name_buffer))
         logging.info(buffer_size)
-
+        
+        product_name = self.ffi.string(product_name_buffer)
+        
         return product_name
 
     def has_function(self, camera_function_id):

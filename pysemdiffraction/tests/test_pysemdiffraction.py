@@ -12,7 +12,7 @@ Tests for `pysemdiffraction` module.
 import sys
 import unittest
 
-from pysemdiffraction import pysemdiffraction
+from pysemdiffraction import pysemdiffraction_cli
 
 
 

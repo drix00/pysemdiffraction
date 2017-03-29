@@ -42,7 +42,7 @@ if __name__ == "__main__":  # pragma: no cover
     #logging.getLogger().setLevel(logging.INFO)
     sentach_api = Sentech()
 
-    sentach_api.init_api()
+    #sentach_api.init_api()
     print(sentach_api.get_api_version())
     print(sentach_api.get_api_file_version())
 
@@ -63,5 +63,10 @@ if __name__ == "__main__":  # pragma: no cover
         print("{:d} -> {:s}".format(key, str(value)))
 
     sentach_api.print_available_functions()
-
+    
+    print(sentach_api.get_color_array())
+    print(sentach_api.get_camera_user_id())
+    print(sentach_api.get_available_scan_mode())
+    print(sentach_api.get_scan_mode())
+    
     sentach_api.close_camera()

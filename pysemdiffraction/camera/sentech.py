@@ -464,7 +464,7 @@ class Sentech(object):
 
         logging.info(enable_scan_mode[0])
 
-        return ScanMode(enable_scan_mode[0])
+        return hex(enable_scan_mode[0])
 
     def get_scan_mode(self):
         self._find_camera()

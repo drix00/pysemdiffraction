@@ -34,6 +34,7 @@ from enum import Enum
 
 # Third party modules.
 from cffi import FFI
+import six
 
 # Local modules.
 
@@ -406,9 +407,16 @@ class Sentech(object):
         self._find_camera()
 
         camera_id = self.ffi.new("PDWORD", 0)
-        camera_name_buffer = self.ffi.new("PWSTR")
-        buffer_size = 0
-        status = self.library_handler.StTrg_ReadCameraUserIDW(self.camera_handle, camera_id, camera_name_buffer, buffer_size)
+        if six.PY3:
+            camera_name_buffer = self.ffi.new("PWSTR")
+            buffer_size = 250
+            status = self.library_handler.StTrg_ReadCameraUserIDW(self.camera_handle, camera_id, camera_name_buffer, buffer_size)
+        elif six.PY2:
+            #camera_name_buffer = self.ffi.new("PSTR")
+            camera_name_buffer = self.ffi.new("PWSTR")
+            buffer_size = 250
+            #status = self.library_handler.StTrg_ReadCameraUserIDA(self.camera_handle, camera_id, camera_name_buffer, buffer_size)
+            status = self.library_handler.StTrg_ReadCameraUserIDW(self.camera_handle, camera_id, camera_name_buffer, buffer_size)
         if not status:
             logging.error("Cannot get the camera user ID")
 
@@ -431,9 +439,13 @@ class Sentech(object):
             return
 
         self._find_camera()
-
-        setting_file_path_buffer = self.ffi.new("PCWSTR", setting_file_path[0])
-        status = self.library_handler.StTrg_ReadSettingFileW(self.camera_handle, setting_file_path_buffer)
+        
+        if six.PY3:
+            setting_file_path_buffer = self.ffi.new("PCWSTR", setting_file_path[0])
+            status = self.library_handler.StTrg_ReadSettingFileW(self.camera_handle, setting_file_path_buffer)
+        elif six.PY2:
+            setting_file_path_buffer = self.ffi.new("PCSTR", setting_file_path[0])
+            status = self.library_handler.StTrg_ReadSettingFileA(self.camera_handle, setting_file_path_buffer)
         if not status:
             logging.error("Cannot get the read setting file: {:s}".format(setting_file_path))
         logging.info(setting_file_path_buffer[0])
@@ -445,9 +457,13 @@ class Sentech(object):
             return
 
         self._find_camera()
-
-        setting_file_path_buffer = self.ffi.new("PCWSTR", setting_file_path[0])
-        status = self.library_handler.StTrg_WriteSettingFileW(self.camera_handle, setting_file_path_buffer)
+        
+        if six.PY3:
+            setting_file_path_buffer = self.ffi.new("PCWSTR", setting_file_path[0])
+            status = self.library_handler.StTrg_WriteSettingFileW(self.camera_handle, setting_file_path_buffer)
+        elif six.PY2:
+            setting_file_path_buffer = self.ffi.new("PCSTR", setting_file_path[0])
+            status = self.library_handler.StTrg_WriteSettingFileA(self.camera_handle, setting_file_path_buffer)
         if not status:
             logging.error("Cannot get the write setting file: {:s}".format(setting_file_path))
 

@@ -154,7 +154,7 @@ class TestSentech(unittest.TestCase):
         """
 
         self.sentach_api.open_camera()
-        self.assertEqual(-1, self.sentach_api.camera_handle_value)
+        self.assertNotEqual(-1, self.sentach_api.camera_handle_value)
         self.sentach_api.close_camera()
         self.assertEqual(None, self.sentach_api.camera_handle_value)
 
@@ -294,7 +294,7 @@ class TestSentech(unittest.TestCase):
         Test the method `get_available_scan_mode`.
         """
         available_scan_mode_ref = ScanMode.STCAM_SCAN_MODE_NORMAL
-
+        available_scan_mode_ref = hex(0x01ff)
         available_scan_mode = self.sentach_api.get_available_scan_mode()
         self.assertEqual(available_scan_mode_ref, available_scan_mode)
 

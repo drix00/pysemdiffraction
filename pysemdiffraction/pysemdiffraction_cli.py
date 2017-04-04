@@ -28,6 +28,7 @@ Python scripts to acquire and analyze SEM diffraction pattern
 
 # Standard library modules.
 import logging
+import time
 
 # Third party modules.
 
@@ -66,7 +67,16 @@ if __name__ == "__main__":  # pragma: no cover
     
     print(sentach_api.get_color_array())
     print(sentach_api.get_camera_user_id())
+    time.sleep(1)
     print(sentach_api.get_available_scan_mode())
-    print(sentach_api.get_scan_mode())
+    time.sleep(1)
+    #print(sentach_api.get_scan_mode())
     
+    filename = "test_write_setting.cfg"
+    #sentach_api.write_setting_file(filename)
+    
+    time.sleep(1)
     sentach_api.close_camera()
+    time.sleep(2)
+
+    print("End of the script!")

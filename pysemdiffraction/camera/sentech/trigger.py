@@ -201,10 +201,10 @@ class Sentech(object):
 
     def get_dll_file_path(self):
         if platform.architecture()[0] == '64bit':
-            dll_file_path = get_current_module_path(__file__, "../../lib/camera/x64/StTrgApi.dll")
+            dll_file_path = get_current_module_path(__file__, "../../../lib/camera/x64/StTrgApi.dll")
             logging.debug("64 bit platform found")
         elif platform.architecture()[0] == '32bit':
-            dll_file_path = get_current_module_path(__file__, "../../lib/camera/x86/StTrgApi.dll")
+            dll_file_path = get_current_module_path(__file__, "../../../lib/camera/x86/StTrgApi.dll")
             logging.debug("32 bit platform found")
         else:
             message = "Cannot determine platform architecture: 32-bit or 64-bit."
@@ -215,7 +215,7 @@ class Sentech(object):
         return dll_file_path
 
     def get_include_file_path(self):
-        include_file_path = get_current_module_path(__file__, "../../include/camera/StTrgApi_stripped.h")
+        include_file_path = get_current_module_path(__file__, "../../../include/camera/StTrgApi_stripped.h")
         logging.info("include_file_path: {:s}".format(include_file_path))
         return include_file_path
 
@@ -439,7 +439,7 @@ class Sentech(object):
             return
 
         self._find_camera()
-        
+
         if six.PY3:
             setting_file_path_buffer = self.ffi.new("PCWSTR", setting_file_path[0])
             status = self.library_handler.StTrg_ReadSettingFileW(self.camera_handle, setting_file_path_buffer)
@@ -457,7 +457,7 @@ class Sentech(object):
             return
 
         self._find_camera()
-        
+
         if six.PY3:
             setting_file_path_buffer = self.ffi.new("PCWSTR", setting_file_path[0])
             status = self.library_handler.StTrg_WriteSettingFileW(self.camera_handle, setting_file_path_buffer)

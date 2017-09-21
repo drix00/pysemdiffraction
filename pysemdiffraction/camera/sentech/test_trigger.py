@@ -26,19 +26,20 @@ Tests for the module :py:mod:`pysemdiffraction.camera.sentech`.
 # limitations under the License.
 ###############################################################################
 
+import os.path
 # Standard library modules.
 import unittest
-import os.path
 
 # Third party modules.
 from cffi import FFI
 from nose import SkipTest
 
-# Local modules.
-
-# Project modules.
-from pysemdiffraction.camera.sentech import Sentech, ColorArray, ScanMode
 from pysemdiffraction import get_current_module_path
+# Project modules.
+from pysemdiffraction.camera.sentech.trigger import Sentech, ColorArray, ScanMode
+
+
+# Local modules.
 
 # Globals and constants variables.
 
@@ -54,7 +55,7 @@ class TestSentech(unittest.TestCase):
 
         unittest.TestCase.setUp(self)
 
-        self.sentach_api = Sentech()
+        self.sentech_api = Sentech()
 
     def tearDown(self):
         """
@@ -62,6 +63,14 @@ class TestSentech(unittest.TestCase):
         """
 
         unittest.TestCase.tearDown(self)
+
+    def is_camera_connected(self):
+        usb_vendor_id, usb_product_id, fpga_version, firmware_version = self.sentech_api.get_camera_version()
+
+        if usb_vendor_id == 0 and usb_product_id == 0 and fpga_version == 0 and firmware_version == 0:
+            return False
+        else:
+            return True
 
     def testSkeleton(self):
         """
@@ -76,7 +85,7 @@ class TestSentech(unittest.TestCase):
         Test the method `get_dll_file_path`.
         """
 
-        dll_file_path = self.sentach_api.get_dll_file_path()
+        dll_file_path = self.sentech_api.get_dll_file_path()
         self.assertTrue(os.path.isfile(dll_file_path))
 
         # self.fail("Test if the testcase is working.")
@@ -87,7 +96,7 @@ class TestSentech(unittest.TestCase):
         Test the method `get_include_file_path`.
         """
 
-        include_file_path = self.sentach_api.get_include_file_path()
+        include_file_path = self.sentech_api.get_include_file_path()
         self.assertTrue(os.path.isfile(include_file_path))
 
         # self.fail("Test if the testcase is working.")
@@ -98,16 +107,16 @@ class TestSentech(unittest.TestCase):
         Test the method `init_api`.
         """
 
-        self.sentach_api.ffi = FFI()
-        self.sentach_api.ffi.set_unicode(True)
-        self.sentach_api.library_handler = None
-        self.sentach_api.camera_handle = None
+        self.sentech_api.ffi = FFI()
+        self.sentech_api.ffi.set_unicode(True)
+        self.sentech_api.library_handler = None
+        self.sentech_api.camera_handle = None
 
-        self.assertEqual(1, len(self.sentach_api.ffi._cdefsources))
-        self.assertEqual(0, len(self.sentach_api.ffi._libraries))
-        self.sentach_api.init_api()
-        self.assertEqual(2, len(self.sentach_api.ffi._cdefsources))
-        self.assertEqual(1, len(self.sentach_api.ffi._libraries))
+        self.assertEqual(1, len(self.sentech_api.ffi._cdefsources))
+        self.assertEqual(0, len(self.sentech_api.ffi._libraries))
+        self.sentech_api.init_api()
+        self.assertEqual(2, len(self.sentech_api.ffi._cdefsources))
+        self.assertEqual(1, len(self.sentech_api.ffi._libraries))
 
         # self.fail("Test if the testcase is working.")
         self.assert_(True)
@@ -118,7 +127,7 @@ class TestSentech(unittest.TestCase):
         """
 
         version_ref = (3, 7, 0, 3062)
-        version = self.sentach_api.get_api_version()
+        version = self.sentech_api.get_api_version()
         self.assertTupleEqual(version_ref, version)
 
         # self.fail("Test if the testcase is working.")
@@ -130,7 +139,7 @@ class TestSentech(unittest.TestCase):
         """
 
         version_ref = (3, 7, 0, 3062)
-        version = self.sentach_api.get_api_file_version()
+        version = self.sentech_api.get_api_file_version()
         self.assertTupleEqual(version_ref, version)
 
         # self.fail("Test if the testcase is working.")
@@ -141,9 +150,9 @@ class TestSentech(unittest.TestCase):
         Test the method `open_camera`.
         """
 
-        self.assertEqual(None, self.sentach_api.camera_handle_value)
-        self.sentach_api.open_camera()
-        self.assertEqual(-1, self.sentach_api.camera_handle_value)
+        self.assertEqual(None, self.sentech_api.camera_handle_value)
+        self.sentech_api.open_camera()
+        self.assertEqual(-1, self.sentech_api.camera_handle_value)
 
         # self.fail("Test if the testcase is working.")
         self.assert_(True)
@@ -152,11 +161,13 @@ class TestSentech(unittest.TestCase):
         """
         Test the method `close_camera`.
         """
+        if not self.is_camera_connected():
+            raise SkipTest
 
-        self.sentach_api.open_camera()
-        self.assertNotEqual(-1, self.sentach_api.camera_handle_value)
-        self.sentach_api.close_camera()
-        self.assertEqual(None, self.sentach_api.camera_handle_value)
+        self.sentech_api.open_camera()
+        self.assertNotEqual(-1, self.sentech_api.camera_handle_value)
+        self.sentech_api.close_camera()
+        self.assertEqual(None, self.sentech_api.camera_handle_value)
 
         # self.fail("Test if the testcase is working.")
         self.assert_(True)
@@ -171,7 +182,7 @@ class TestSentech(unittest.TestCase):
         fpga_version_ref = 0
         firmware_version_ref = 0
 
-        usb_vendor_id, usb_product_id, fpga_version, firmware_version = self.sentach_api.get_camera_version()
+        usb_vendor_id, usb_product_id, fpga_version, firmware_version = self.sentech_api.get_camera_version()
 
         self.assertEqual(usb_vendor_id_ref, usb_vendor_id)
         self.assertEqual(usb_product_id_ref, usb_product_id)
@@ -188,7 +199,7 @@ class TestSentech(unittest.TestCase):
 
         product_name_ref = ""
 
-        product_name = self.sentach_api.get_product_name()
+        product_name = self.sentech_api.get_product_name()
 
         self.assertEqual(product_name_ref, product_name)
 
@@ -201,7 +212,7 @@ class TestSentech(unittest.TestCase):
         """
 
         camera_function_id = 0
-        function_availability = self.sentach_api.has_function(camera_function_id)
+        function_availability = self.sentech_api.has_function(camera_function_id)
         self.assertEqual(False, function_availability)
 
         # self.fail("Test if the testcase is working.")
@@ -213,7 +224,7 @@ class TestSentech(unittest.TestCase):
         """
         color_array_ref = ColorArray.STCAM_COLOR_ARRAY_NONE
 
-        color_array = self.sentach_api.get_color_array()
+        color_array = self.sentech_api.get_color_array()
         self.assertEqual(color_array_ref, color_array)
 
         # self.fail("Test if the testcase is working.")
@@ -227,7 +238,7 @@ class TestSentech(unittest.TestCase):
         camera_id_ref = 0
         camera_name_ref = ""
 
-        camera_id, camera_name = self.sentach_api.get_camera_user_id()
+        camera_id, camera_name = self.sentech_api.get_camera_user_id()
 
         self.assertEqual(camera_id_ref, camera_id)
         self.assertEqual(camera_name_ref, camera_name)
@@ -240,21 +251,21 @@ class TestSentech(unittest.TestCase):
         Test the method `is_prohibited_call_timing`.
         """
 
-        self.sentach_api.is_transferring_image = False
-        self.sentach_api.is_inside_callback_function = False
-        self.assertEqual(False, self.sentach_api.is_prohibited_call_timing())
+        self.sentech_api.is_transferring_image = False
+        self.sentech_api.is_inside_callback_function = False
+        self.assertEqual(False, self.sentech_api.is_prohibited_call_timing())
 
-        self.sentach_api.is_transferring_image = True
-        self.sentach_api.is_inside_callback_function = False
-        self.assertEqual(True, self.sentach_api.is_prohibited_call_timing())
+        self.sentech_api.is_transferring_image = True
+        self.sentech_api.is_inside_callback_function = False
+        self.assertEqual(True, self.sentech_api.is_prohibited_call_timing())
 
-        self.sentach_api.is_transferring_image = False
-        self.sentach_api.is_inside_callback_function = True
-        self.assertEqual(True, self.sentach_api.is_prohibited_call_timing())
+        self.sentech_api.is_transferring_image = False
+        self.sentech_api.is_inside_callback_function = True
+        self.assertEqual(True, self.sentech_api.is_prohibited_call_timing())
 
-        self.sentach_api.is_transferring_image = True
-        self.sentach_api.is_inside_callback_function = True
-        self.assertEqual(True, self.sentach_api.is_prohibited_call_timing())
+        self.sentech_api.is_transferring_image = True
+        self.sentech_api.is_inside_callback_function = True
+        self.assertEqual(True, self.sentech_api.is_prohibited_call_timing())
 
         # self.fail("Test if the testcase is working.")
         self.assert_(True)
@@ -264,11 +275,11 @@ class TestSentech(unittest.TestCase):
         Test the method `read_setting_file`.
         """
 
-        setting_file_path = get_current_module_path("__file__", "../../test_data/read_setting_file.cfg")
+        setting_file_path = get_current_module_path(__file__, "../../../test_data/read_setting_file.cfg")
         if not os.path.isfile(setting_file_path):
-            SkipTest
+            raise SkipTest
 
-        self.sentach_api.read_setting_file(setting_file_path)
+        self.sentech_api.read_setting_file(setting_file_path)
 
         # self.fail("Test if the testcase is working.")
         self.assert_(True)
@@ -278,13 +289,13 @@ class TestSentech(unittest.TestCase):
         Test the method `read_setting_file`.
         """
 
-        setting_file_path_ref = get_current_module_path("__file__", "../../test_data/read_setting_file.cfg")
+        setting_file_path_ref = get_current_module_path(__file__, "../../../test_data/read_setting_file.cfg")
         if not os.path.isfile(setting_file_path_ref):
-            SkipTest
+            raise SkipTest
 
-        setting_file_path = get_current_module_path("__file__", "../../test_data/write_setting_file.cfg")
+        setting_file_path = get_current_module_path(__file__, "../../../test_data/write_setting_file.cfg")
 
-        self.sentach_api.write_setting_file(setting_file_path)
+        self.sentech_api.write_setting_file(setting_file_path)
 
         # self.fail("Test if the testcase is working.")
         self.assert_(True)
@@ -293,9 +304,12 @@ class TestSentech(unittest.TestCase):
         """
         Test the method `get_available_scan_mode`.
         """
+        if not self.is_camera_connected():
+            raise SkipTest
+
         available_scan_mode_ref = ScanMode.STCAM_SCAN_MODE_NORMAL
         available_scan_mode_ref = hex(0x01ff)
-        available_scan_mode = self.sentach_api.get_available_scan_mode()
+        available_scan_mode = self.sentech_api.get_available_scan_mode()
         self.assertEqual(available_scan_mode_ref, available_scan_mode)
 
         # self.fail("Test if the testcase is working.")
@@ -311,7 +325,7 @@ class TestSentech(unittest.TestCase):
         width_ref = 0
         height_ref = 0
 
-        scan_mode, offset_x, offset_y, width, height = self.sentach_api.get_scan_mode()
+        scan_mode, offset_x, offset_y, width, height = self.sentech_api.get_scan_mode()
         self.assertEqual(scan_mode_ref, scan_mode)
         self.assertEqual(offset_x_ref, offset_x)
         self.assertEqual(offset_y_ref, offset_y)
@@ -331,7 +345,7 @@ class TestSentech(unittest.TestCase):
         width_ref = 100
         height_ref = 230
 
-        self.sentach_api.set_scan_mode(scan_mode_ref, offset_x_ref, offset_y_ref, width_ref, height_ref)
+        self.sentech_api.set_scan_mode(scan_mode_ref, offset_x_ref, offset_y_ref, width_ref, height_ref)
 
         scan_mode_ref = ScanMode.STCAM_SCAN_MODE_NORMAL
         offset_x_ref = 0
@@ -339,7 +353,7 @@ class TestSentech(unittest.TestCase):
         width_ref = 0
         height_ref = 0
 
-        scan_mode, offset_x, offset_y, width, height = self.sentach_api.get_scan_mode()
+        scan_mode, offset_x, offset_y, width, height = self.sentech_api.get_scan_mode()
         self.assertEqual(scan_mode_ref, scan_mode)
         self.assertEqual(offset_x_ref, offset_x)
         self.assertEqual(offset_y_ref, offset_y)
@@ -348,6 +362,7 @@ class TestSentech(unittest.TestCase):
 
         # self.fail("Test if the testcase is working.")
         self.assert_(True)
+
 
 if __name__ == '__main__':  # pragma: no cover
     import nose

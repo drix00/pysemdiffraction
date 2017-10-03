@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 """
-.. py:currentmodule:: pysemdiffraction.camera.test_sentech
+.. py:currentmodule:: pysemdiffraction.camera.sentech.test_standard
    :synopsis: Tests for the module :py:mod:`pysemdiffraction.camera.sentech`
 
 .. moduleauthor:: Hendrix Demers <hendrix.demers@mail.mcgill.ca>
 
-Tests for the module :py:mod:`pysemdiffraction.camera.sentech`.
+Tests for the module :py:mod:`pysemdiffraction.camera.sentech.standard`.
 """
 
 ###############################################################################
@@ -36,16 +36,16 @@ from nose import SkipTest
 
 from pysemdiffraction import get_current_module_path
 # Project modules.
-from pysemdiffraction.camera.sentech.trigger import Sentech, ColorArray, ScanMode
+from pysemdiffraction.camera.sentech.standard import Sentech, ColorArray, ScanMode
 
 
 # Local modules.
 
 # Globals and constants variables.
 
-class TestSentech(unittest.TestCase):
+class TestStandard(unittest.TestCase):
     """
-    TestCase class for the module `pysemdiffraction.camera.sentech`.
+    TestCase class for the module `pysemdiffraction.camera.sentech.standard`.
     """
 
     def setUp(self):

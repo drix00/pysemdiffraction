@@ -38,10 +38,10 @@ from pysemdiffraction.camera.sentech.trigger import Sentech
 # Globals and constants variables.
 
 if __name__ == "__main__":  # pragma: no cover
-    #logging.getLogger().setLevel(logging.INFO)
+    # logging.getLogger().setLevel(logging.INFO)
     sentach_api = Sentech()
 
-    #sentech_api.init_api()
+    # sentech_api.init_api()
     print(sentach_api.get_api_version())
     print(sentach_api.get_api_file_version())
 
@@ -68,10 +68,10 @@ if __name__ == "__main__":  # pragma: no cover
     time.sleep(1)
     print(sentach_api.get_available_scan_mode())
     time.sleep(1)
-    #print(sentech_api.get_scan_mode())
+    # print(sentech_api.get_scan_mode())
 
     filename = "test_write_setting.cfg"
-    #sentech_api.write_setting_file(filename)
+    # sentech_api.write_setting_file(filename)
 
     time.sleep(1)
     sentach_api.close_camera()

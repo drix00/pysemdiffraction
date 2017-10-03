@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 """
-.. py:currentmodule:: pysemdiffraction.camera.sentech.trigger
+.. py:currentmodule:: pysemdiffraction.camera.sentech.standard
    :synopsis: Python wrapper on the Sentech camera API.
 
 .. moduleauthor:: Hendrix Demers <hendrix.demers@mail.mcgill.ca>
 
-Python wrapper on the Sentech camera Trigger SDK API.
+Python wrapper on the Sentech camera Standard SDK API.
 """
 
 ###############################################################################
@@ -202,10 +202,10 @@ class Sentech(object):
 
     def get_dll_file_path(self):
         if platform.architecture()[0] == '64bit':
-            dll_file_path = get_current_module_path(__file__, "../../../lib/camera/x64/StTrgApi.dll")
+            dll_file_path = get_current_module_path(__file__, "../../../lib/camera/x64/StCamD.dll")
             logging.debug("64 bit platform found")
         elif platform.architecture()[0] == '32bit':
-            dll_file_path = get_current_module_path(__file__, "../../../lib/camera/x86/StTrgApi.dll")
+            dll_file_path = get_current_module_path(__file__, "../../../lib/camera/x86/StCamD.dll")
             logging.debug("32 bit platform found")
         else:
             message = "Cannot determine platform architecture: 32-bit or 64-bit."
@@ -216,7 +216,7 @@ class Sentech(object):
         return dll_file_path
 
     def get_include_file_path(self):
-        include_file_path = get_current_module_path(__file__, "../../../include/camera/StTrgApi_stripped.h")
+        include_file_path = get_current_module_path(__file__, "../../../include/camera/StCamD_stripped.h")
         logging.info("include_file_path: {:s}".format(include_file_path))
         return include_file_path
 

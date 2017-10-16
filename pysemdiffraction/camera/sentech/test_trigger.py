@@ -126,7 +126,7 @@ class TestSentech(unittest.TestCase):
         Test the method `get_api_version`.
         """
 
-        version_ref = (3, 7, 0, 3062)
+        version_ref = (3, 9, 0, 3079)
         version = self.sentech_api.get_api_version()
         self.assertTupleEqual(version_ref, version)
 
@@ -138,7 +138,7 @@ class TestSentech(unittest.TestCase):
         Test the method `get_api_file_version`.
         """
 
-        version_ref = (3, 7, 0, 3062)
+        version_ref = (3, 9, 0, 3079)
         version = self.sentech_api.get_api_file_version()
         self.assertTupleEqual(version_ref, version)
 
